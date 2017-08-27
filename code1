@@ -1,0 +1,67 @@
+/*
+ * PROJECT_0.c
+ *
+ * Created: 05-01-2017 19:24:59
+ *  Author: LEONEM-PC
+ */ 
+
+#include <avr/io.h>
+#include <util/delay.h>
+
+void adc_init()
+ {
+  ADCSRA=0X80;
+  ADMUX=0X40;
+ }
+
+ int adc_value()
+ {
+    ADCSRA=0Xe0;
+	while((ADCSRA&(1<<ADIF))==0);
+	return ADC;
+ }
+ 
+ 
+ void main()
+ {
+   int s1,s2,s3;
+   DDRB=0xff;
+   adc_init();
+   
+   while(1)
+   {
+     ADMUX=0x40;
+	 s1=adc_value();
+	 _delay_ms(2);
+	
+	 ADMUX=0x41;
+	 s2=adc_value();
+	 _delay_ms(2);
+	
+	 ADMUX=0x42;
+	 s3=adc_value();
+	 _delay_ms(2);
+	 
+	 if(s1>500&&s2>500)
+	  {
+		  PORTB=0b00010100;
+		  _delay_ms(2);
+	  }
+	 
+	 else if(s1<500&&s2>500)
+	  {
+		  PORTB=0b00010010;
+		  _delay_ms(2);
+	  }
+	  
+	 else if(s1>500&&s2<500)
+	  {
+		   PORTB=0b00001100;
+		  _delay_ms(2);
+	  }
+	  
+	  
+   }
+   
+   	 
+ }
